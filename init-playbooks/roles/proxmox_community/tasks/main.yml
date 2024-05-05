@@ -1,0 +1,33 @@
+
+- name: Remove Entreprise Repos
+  ansible.builtin.apt_repository:
+    repo: "{{ item }}"
+    state: absent
+    update_cache: false
+  loop:
+    - deb https://enterprise.proxmox.com/debian/pve bookworm pve-enterprise
+    - deb https://enterprise.proxmox.com/debian/ceph-quincy bookworm enterprise
+
+
+
+- name: Add Community PVE Repo
+  ansible.builtin.apt_repository:
+    repo: deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription
+    state: present
+
+
+
+# https://github.com/foundObjects/pve-nag-buster/blob/master/pve-nag-buster.sh
+- name: Remove no-subscription nag on webui
+  shell: |
+    NAGTOKEN="data.status.toLowerCase() !== 'active'"
+    NAGFILE="/usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js"
+    SCRIPT="$(basename "$0")"
+
+    # disable license nag: https://johnscs.com/remove-proxmox51-subscription-notice/
+
+    if grep -qs "$NAGTOKEN" "$NAGFILE" > /dev/null 2>&1; then
+      echo "$SCRIPT: Removing Nag ..."
+      sed -i.orig "s/$NAGTOKEN/false/g" "$NAGFILE"
+      systemctl restart pveproxy.service
+    fi

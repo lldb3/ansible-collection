@@ -1,0 +1,11 @@
+# site.yml
+---
+- hosts: all
+  roles:
+    - role: shell
+      tags: shell
+    - role: docker
+      tags: docker
+
+
+

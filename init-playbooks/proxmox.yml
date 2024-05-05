@@ -1,0 +1,11 @@
+# site.yml
+---
+- hosts: all
+  roles:
+    - role: proxmox_community
+      tags: proxmox_community
+    - role: shell
+      tags: shell
+
+
+
