@@ -5,17 +5,19 @@
       - zsh
       - curl
       - wget
+      - net-tools
       - git
       - gcc
       - bat
-      - net-tools
       - fd-find
       - htop
       - neovim
+      - tldr
       - ncdu
       - jq
       - iotop
       - nethogs
+      - build-essential
     state: present
 
 - name: debug $HOME
