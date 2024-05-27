@@ -19,6 +19,7 @@
       - nethogs
       - build-essential
     state: present
+  become: true
 
 - name: debug $HOME
   debug: var=ansible_env.HOME
