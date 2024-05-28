@@ -7,6 +7,7 @@
       - curl
       - gnupg
       - lsb-release
+  become: true
 
 - name: debug distrib name
   debug: var=ansible_distribution_release
@@ -15,11 +16,13 @@
   apt_key:
     url: "https://download.docker.com/linux/debian/gpg"
     state: present
+  become: true
 
 - name: add repo
   apt_repository:
     repo: "deb https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
     state: present
+  become: true
 
 - name: install docker
   apt:
@@ -32,14 +35,14 @@
       - docker-compose-plugin
       - docker-buildx-plugin
       - docker-ce-rootless-extras
+  become: true
 
 
 
-#- name: Add the user 'containers' with a bash shell,
-#  ansible.builtin.user:
-#    name: containers
-#    shell: /bin/bash
-#    groups: docker
-#    uid: 1000
-#    append: yes
+- name: Add the current user to docker group,
+  ansible.builtin.user:
+    name: "{{ansible_user}}"
+    groups: docker
+    append: true
+  become: true
 
